@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart City Dashboard - Next-Gen Urban Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --accent: #22c55e;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #94a3b8;
+            --accent: #22c55e;
+            --background: #0f172a;
+            --text: #f1f5f9;
+            --text-light: #cbd5e1;
+            --border: #1e293b;
+            --card-bg: #1e293b;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--border);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--background), var(--card-bg));
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            height: 40px;
+            margin: 20px 0;
+            background: var(--card-bg);
+            padding: 8px 0;
+            border-radius: 8px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+        }
+
+        .ticker span {
+            margin: 0 40px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .button {
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .primary-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .primary-button:hover::before {
+            left: 100%;
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .secondary-button:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 0;
+            background-color: var(--card-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--background);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 120px 0;
+            background: var(--background);
+            position: relative;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 70%);
+            opacity: 0.05;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .stat-number::after {
+            content: '+';
+            position: absolute;
+            font-size: 24px;
+            top: 0;
+            right: -20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 80px 0 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            color: var(--text);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .social-link {
+            color: var(--text);
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-light);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🏙️</span>
+                MetroSphere
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#preview" class="nav-link">Preview</a>
+                <a href="#stats" class="nav-link">Impact</a>
+                <!-- <a href="index.html" class="nav-link">Dashboard</a> -->
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <h1 data-aos="fade-up">Next-Generation<br>Smart City Platform</h1>
+            <div class="ticker-wrap" data-aos="fade-up" data-aos-delay="200">
+                <div class="ticker">
+                    <span>Real-time Air Quality Monitoring</span>
+                    <span>Traffic Management System</span>
+                    <span>Emergency Response Network</span>
+                    <span>Energy Usage Analytics</span>
+                    <span>Water Level Monitoring</span>
+                </div>
+            </div>
+            <p data-aos="fade-up" data-aos-delay="400">Transform urban management with our AI-powered dashboard. Experience the future of city monitoring and management with real-time insights and predictive analytics.</p>
+            <div class="cta-buttons" data-aos="fade-up" data-aos-delay="600">
+                <a href="index.html" class="button primary-button">Launch Dashboard</a>
+                <a href="#features" class="button secondary-button">Explore Features</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Powerful Features</h2>
+                <p>Everything you need to monitor and manage your city efficiently</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Monitor critical urban parameters with interactive charts and real-time updates from IoT sensors.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-map-marked-alt feature-icon"></i>
+                    <h3>Smart Mapping</h3>
+                    <p>View traffic patterns, emergency routes, and city infrastructure on an interactive map interface.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <i class="fas fa-brain feature-icon"></i>
+                    <h3>AI Predictions</h3>
+                    <p>Get intelligent alerts and predictions powered by advanced machine learning algorithms.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="800">
+                    <i class="fas fa-mobile-alt feature-icon"></i>
+                    <h3>Mobile Ready</h3>
+                    <p>Access the dashboard from any device with our fully responsive design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats" id="stats">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Real Impact</h2>
+                <p>Making cities smarter, one data point at a time</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">Cities Connected</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-number">40</div>
+                    <div class="stat-label">Resource Optimization</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Response Time Reduction</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="800">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Carbon Reduction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>Building smarter, more sustainable cities through innovative technology and data-driven solutions.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Features</a>
+                        <a href="#" class="footer-link">Documentation</a>
+                        <a href="#" class="footer-link">API Access</a>
+                        <a href="#" class="footer-link">Case Studies</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Support</a>
+                        <a href="#" class="footer-link">Sales</a>
+                        <a href="#" class="footer-link">Partners</a>
+                        <a href="#" class="footer-link">Media</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 SmartCity Dashboard. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') {
+                html.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
